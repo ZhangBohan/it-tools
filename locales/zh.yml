@@ -388,3 +388,6 @@ tools:
   text-to-binary:
     title: 文本到 ASCII 二进制
     description: 将文本转换为其 ASCII 二进制表示形式，反之亦然。
+  jwt-expire-later:
+    title: JWT 过期时间延长
+    description: 延长JWT令牌的过期时间，以便在不重新登录的情况下保持登录状态。
