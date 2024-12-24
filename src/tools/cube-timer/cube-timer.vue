@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { formatTime, generateScramble, type TimerRecord } from './cube-timer.service';
 import { messages } from './cube-timer.i18n';
@@ -13,7 +13,16 @@ const isReady = ref(false);
 const isRunning = ref(false);
 const startTime = ref(0);
 const currentTime = ref(0);
-const records = ref<TimerRecord[]>([]);
+const STORAGE_KEY = 'cube-timer-records';
+
+const records = ref<TimerRecord[]>(
+  JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+);
+
+watch(records, (newRecords) => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(newRecords));
+}, { deep: true });
+
 const currentScramble = ref(generateScramble());
 let timerInterval: number | null = null;
 let readyTimeout: number | null = null;
@@ -85,6 +94,10 @@ function handleKeyUp(e: KeyboardEvent) {
 function deleteRecord(id: number) {
   records.value = records.value.filter(record => record.id !== id);
 }
+
+function clearAllRecords() {
+  records.value = [];
+}
 </script>
 
 <template>
@@ -111,7 +124,12 @@ function deleteRecord(id: number) {
       </div>
 
       <div class="records">
-        <h3>{{ t('records') }}</h3>
+        <div class="records-header">
+          <h3>{{ t('records') }}</h3>
+          <button v-if="records.length > 0" @click="clearAllRecords" class="delete-btn" size="small">
+            {{ t('clearRecords') }}
+          </button>
+        </div>
         <div v-for="record in records" :key="record.id" class="record-item">
           <span>{{ formatTime(record.time) }}</span>
           <span class="scramble-text">{{ record.scramble }}</span>
@@ -192,5 +210,12 @@ function deleteRecord(id: number) {
 
 .time.ready {
   color: #4CAF50;
+}
+
+.records-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }
 </style> 
