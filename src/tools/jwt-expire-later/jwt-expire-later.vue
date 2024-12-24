@@ -3,12 +3,14 @@ import { decodeJwt, expireJwtLater } from './jwt-expire-later.service';
 import { useValidation } from '@/composable/validation';
 import { isNotThrowing } from '@/utils/boolean';
 import { withDefaultOnError } from '@/utils/defaults';
+import { useRoute } from 'vue-router';
 
+const route = useRoute();
 const rawJwt = ref(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ._sXQcC_3MI6gbiNVK11UCRqmja7nUqZ7oS759N-0YqM',
 );
 
-const rawSecret = ref('your-secret-here');
+const rawSecret = ref(route.query.secret?.toString() || 'your-secret-here');
 const daysLater = ref(30);
 
 const decodedJWT = computed(() =>
