@@ -88,6 +88,8 @@ import { tool as uuidGenerator } from './uuid-generator';
 import { tool as macAddressLookup } from './mac-address-lookup';
 import { tool as xmlFormatter } from './xml-formatter';
 import { tool as yamlViewer } from './yaml-viewer';
+import { tool as cubeTimer } from './cube-timer';
+
 
 export const toolsByCategory: ToolCategory[] = [
   {
@@ -139,6 +141,7 @@ export const toolsByCategory: ToolCategory[] = [
       httpStatusCodes,
       jsonDiff,
       safelinkDecoder,
+      cubeTimer
     ],
   },
   {
@@ -198,3 +201,4 @@ export const tools = toolsByCategory.flatMap(({ components }) => components);
 export const toolsWithCategory = toolsByCategory.flatMap(({ components, name }) =>
   components.map(tool => ({ category: name, ...tool })),
 );
+
