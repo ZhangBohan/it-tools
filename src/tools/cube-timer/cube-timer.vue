@@ -3,6 +3,7 @@ import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { formatTime, generateScramble, type TimerRecord } from './cube-timer.service';
 import { messages } from './cube-timer.i18n';
+import CubeAnimation from './cube-animation.vue';
 
 const { t } = useI18n({
   messages,
@@ -98,12 +99,31 @@ function deleteRecord(id: number) {
 function clearAllRecords() {
   records.value = [];
 }
+
+const showAnimation = ref(false);
+
+function toggleAnimation() {
+  showAnimation.value = !showAnimation.value;
+}
 </script>
 
 <template>
   <c-card>
     <div class="timer-container">
-      <div class="scramble">{{ currentScramble }}</div>
+      <div class="scramble-section">
+        <div class="scramble">{{ currentScramble }}</div>
+        <button @click="toggleAnimation" class="animation-btn">
+          {{ showAnimation ? t('hideAnimation') : t('showAnimation') }}
+        </button>
+      </div>
+      
+      <transition name="fade">
+        <CubeAnimation 
+          v-if="showAnimation" 
+          :scramble="currentScramble"
+          class="animation"
+        />
+      </transition>
       
       <div 
         class="time" 
@@ -217,5 +237,39 @@ function clearAllRecords() {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+}
+
+.scramble-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.animation-btn {
+  padding: 4px 12px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.animation-btn:hover {
+  background-color: #45a049;
+}
+
+.animation {
+  margin: 20px 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style> 
