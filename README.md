@@ -12,9 +12,9 @@ Useful tools for developer and people working in IT. [Have a look !](https://it-
 
 ## Functionalities and roadmap
 
-Please check the [issues](https://github.com/CorentinTh/it-tools/issues) to see if some feature listed to be implemented.
+Please check the [issues](https://github.com/ZhangBohan/it-tools/issues) to see if some feature listed to be implemented.
 
-You have an idea of a tool? Submit a [feature request](https://github.com/CorentinTh/it-tools/issues/new/choose)!
+You have an idea of a tool? Submit a [feature request](https://github.com/ZhangBohan/it-tools/issues/new/choose)!
 
 ## Self host
 
@@ -117,7 +117,7 @@ It will create a directory in `src/tools` with the correct files, and a the impo
 
 Big thanks to all the people who have already contributed!
 
-[![contributors](https://contrib.rocks/image?repo=corentinth/it-tools&refresh=1)](https://github.com/corentinth/it-tools/graphs/contributors)
+[![contributors](https://contrib.rocks/image?repo=corentinth/it-tools&refresh=1)](https://github.com/ZhangBohan/it-tools/graphs/contributors)
 
 ## Credits
 

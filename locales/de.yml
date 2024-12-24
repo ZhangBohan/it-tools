@@ -57,7 +57,7 @@ about:
     erstellt und wird von Vercel gehostet und kontinuierlich bereitgestellt. In
     einigen Tools werden Drittanbieter-Open-Source-Bibliotheken verwendet. Du
     findest die vollständige Liste in der
-    [package.json](https://github.com/CorentinTh/it-tools/blob/main/package.json)-Datei
+    [package.json](https://github.com/ZhangBohan/it-tools/blob/main/package.json)-Datei
     des Repositorys.
 
     ## Einen Fehler gefunden? Ein Tool fehlt?
@@ -65,12 +65,12 @@ about:
     Wenn du ein Tool benötigst, das hier noch nicht vorhanden ist, und du
     denkst, dass es nützlich sein könnte, bist du herzlich eingeladen, einen
     Feature-Request im
-    [Issues-Bereich](https://github.com/CorentinTh/it-tools/issues/new/choose)
+    [Issues-Bereich](https://github.com/ZhangBohan/it-tools/issues/new/choose)
     im GitHub-Repository einzureichen.
 
     Und wenn du einen Fehler gefunden hast oder etwas nicht wie erwartet
     funktioniert, melde bitte einen Fehler im
-    [Issues-Bereich](https://github.com/CorentinTh/it-tools/issues/new/choose)
+    [Issues-Bereich](https://github.com/ZhangBohan/it-tools/issues/new/choose)
     im GitHub-Repository.
 favoriteButton:
   remove: Aus Favoriten entfernen
