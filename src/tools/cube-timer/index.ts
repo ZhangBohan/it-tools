@@ -1,4 +1,4 @@
-import { ArrowsShuffle } from '@vicons/tabler';
+import { Clock } from '@vicons/tabler';
 import { defineTool } from '../tool';
 
 export const tool = defineTool({
@@ -7,6 +7,6 @@ export const tool = defineTool({
   description: 'A timer for cube solving',
   keywords: ['cube', 'timer', 'solving'],
   component: () => import('./cube-timer.vue'),
-  icon: ArrowsShuffle,
+  icon: Clock,
   createdAt: new Date('2024-12-15'),
 });
