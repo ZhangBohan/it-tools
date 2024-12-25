@@ -89,6 +89,7 @@ import { tool as macAddressLookup } from './mac-address-lookup';
 import { tool as xmlFormatter } from './xml-formatter';
 import { tool as yamlViewer } from './yaml-viewer';
 import { tool as cubeTimer } from './cube-timer';
+import { tool as pomodoroTimer } from './pomodoro-timer';
 
 
 export const toolsByCategory: ToolCategory[] = [
@@ -177,7 +178,12 @@ export const toolsByCategory: ToolCategory[] = [
   },
   {
     name: 'Measurement',
-    components: [chronometer, temperatureConverter, benchmarkBuilder],
+    components: [
+      chronometer,
+      temperatureConverter,
+      benchmarkBuilder,
+      pomodoroTimer
+    ],
   },
   {
     name: 'Text',
