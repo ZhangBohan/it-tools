@@ -114,6 +114,7 @@ declare module '@vue/runtime-core' {
     IconMdiTranslate: typeof import('~icons/mdi/translate')['default']
     IconMdiTriangleDown: typeof import('~icons/mdi/triangle-down')['default']
     IconMdiVideo: typeof import('~icons/mdi/video')['default']
+    ImageGenerator: typeof import('./src/tools/image-generator/image-generator.vue')['default']
     InputCopyable: typeof import('./src/components/InputCopyable.vue')['default']
     IntegerBaseConverter: typeof import('./src/tools/integer-base-converter/integer-base-converter.vue')['default']
     Ipv4AddressConverter: typeof import('./src/tools/ipv4-address-converter/ipv4-address-converter.vue')['default']

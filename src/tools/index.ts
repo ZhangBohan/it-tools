@@ -90,6 +90,7 @@ import { tool as xmlFormatter } from './xml-formatter';
 import { tool as yamlViewer } from './yaml-viewer';
 import { tool as cubeTimer } from './cube-timer';
 import { tool as pomodoroTimer } from './pomodoro-timer';
+import { tool as imageGenerator } from './image-generator';
 
 
 export const toolsByCategory: ToolCategory[] = [
@@ -147,7 +148,7 @@ export const toolsByCategory: ToolCategory[] = [
   },
   {
     name: 'Images and videos',
-    components: [qrCodeGenerator, wifiQrCodeGenerator, svgPlaceholderGenerator, cameraRecorder],
+    components: [qrCodeGenerator, wifiQrCodeGenerator, svgPlaceholderGenerator, cameraRecorder, imageGenerator],
   },
   {
     name: 'Development',
