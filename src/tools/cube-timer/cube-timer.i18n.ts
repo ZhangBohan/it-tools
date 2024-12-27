@@ -12,7 +12,8 @@ export const messages: LocaleMessages<any> = {
     hideAnimation: 'Hide Animation',
     restart: 'Restart',
     prevMove: 'Previous',
-    nextMove: 'Next'
+    nextMove: 'Next',
+    orLongPress: 'or long press to start/stop'
   },
   zh: {
     pressSpaceToStart: '按空格键开始/停止计时',
@@ -25,7 +26,8 @@ export const messages: LocaleMessages<any> = {
     hideAnimation: '隐藏动画',
     restart: '重新开始',
     prevMove: '上一步',
-    nextMove: '下一步'
+    nextMove: '下一步',
+    orLongPress: '或长按开始/停止'
   },
   ja: {
     pressSpaceToStart: 'スペースキーでタイマーを開始/停止',

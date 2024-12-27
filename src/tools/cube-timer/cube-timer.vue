@@ -105,6 +105,38 @@ const showAnimation = ref(false);
 function toggleAnimation() {
   showAnimation.value = !showAnimation.value;
 }
+
+const touchStartTime = ref(0);
+const TOUCH_THRESHOLD = 500; // 长按阈值（毫秒）
+
+function handleTouchStart(e: TouchEvent) {
+  e.preventDefault(); // 防止双击缩放等默认行为
+  touchStartTime.value = Date.now();
+  if (!isRunning.value && !isReady.value) {
+    readyTimeout = window.setTimeout(() => {
+      isReady.value = true;
+      currentTime.value = 0;
+    }, TOUCH_THRESHOLD);
+  }
+}
+
+function handleTouchEnd(e: TouchEvent) {
+  e.preventDefault();
+  const touchDuration = Date.now() - touchStartTime.value;
+  
+  if (readyTimeout) {
+    clearTimeout(readyTimeout);
+    readyTimeout = null;
+  }
+  
+  if (isRunning.value) {
+    // 如果正在计时，直接停止
+    stopTimer();
+  } else if (touchDuration >= TOUCH_THRESHOLD && isReady.value) {
+    // 如果准备好了且长按足够时间，开始计时
+    startTimer();
+  }
+}
 </script>
 
 <template>
@@ -130,6 +162,8 @@ function toggleAnimation() {
         :class="{ 'ready': isReady }"
         @keydown="handleKeyDown" 
         @keyup="handleKeyUp"
+        @touchstart="handleTouchStart"
+        @touchend="handleTouchEnd"
         tabindex="0"
       >
         {{ formattedTime }}
@@ -137,6 +171,7 @@ function toggleAnimation() {
       
       <div class="instructions">
         {{ t('pressSpaceToStart') }}
+        <span class="mobile-hint">{{ t('orLongPress') }}</span>
       </div>
 
       <div v-if="averageOf5" class="stats">
@@ -271,5 +306,16 @@ function toggleAnimation() {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.mobile-hint {
+  display: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .mobile-hint {
+    display: inline;
+    color: #666;
+  }
 }
 </style> 
