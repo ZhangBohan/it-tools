@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onUnmounted, watch } from 'vue';
+import { ref, computed, onUnmounted, watch, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { messages } from './pomodoro-timer.i18n';
 import { formatTime, type PomodoroSettings, type TimerMode, DEFAULT_SETTINGS, formatDate, getEmojis, type PomodoroRecord } from './pomodoro-timer.service';
@@ -27,27 +27,48 @@ watch(records, (newRecords) => {
   localStorage.setItem(RECORDS_KEY, JSON.stringify(newRecords));
 }, { deep: true });
 
+// 添加新的状态
+const worker = ref<Worker | null>(null);
+const endTime = ref<number>(0);
+
+// 修改计时器相关函数
 function startTimer() {
   if (!isRunning.value) {
     isRunning.value = true;
-    timerInterval = window.setInterval(() => {
-      if (timeLeft.value > 0) {
-        timeLeft.value--;
-      } else {
-        notifyTimeUp();
-        resetTimer();
-      }
-    }, 1000);
+    endTime.value = Date.now() + timeLeft.value * 1000;
+    
+    // 保存状态到 localStorage
+    saveTimerState();
+    
+    // 启动 Web Worker
+    if (!worker.value) {
+      worker.value = new Worker(new URL('./pomodoro-timer.worker.ts', import.meta.url));
+      worker.value.onmessage = handleWorkerMessage;
+    }
+    
+    worker.value.postMessage({ 
+      type: 'start', 
+      endTime: endTime.value 
+    });
+  }
+}
+
+function handleWorkerMessage(e: MessageEvent) {
+  const { type, timeLeft: newTimeLeft } = e.data;
+  
+  if (type === 'tick') {
+    timeLeft.value = newTimeLeft;
+  } else if (type === 'complete') {
+    notifyTimeUp();
+    resetTimer();
   }
 }
 
 function pauseTimer() {
   if (isRunning.value) {
     isRunning.value = false;
-    if (timerInterval) {
-      clearInterval(timerInterval);
-      timerInterval = null;
-    }
+    worker.value?.postMessage({ type: 'stop' });
+    saveTimerState();
   }
 }
 
@@ -114,10 +135,52 @@ const recentRecords = computed(() => {
     .slice(0, 7);  // 显示最近7天的记录
 });
 
-onUnmounted(() => {
-  if (timerInterval) {
-    clearInterval(timerInterval);
+// 添加状态保存和恢复函数
+function saveTimerState() {
+  const state = {
+    isRunning: isRunning.value,
+    timeLeft: timeLeft.value,
+    currentMode: currentMode.value,
+    endTime: endTime.value,
+  };
+  localStorage.setItem('pomodoro-state', JSON.stringify(state));
+}
+
+function restoreTimerState() {
+  const savedState = localStorage.getItem('pomodoro-state');
+  if (savedState) {
+    const state = JSON.parse(savedState);
+    currentMode.value = state.currentMode;
+    
+    if (state.isRunning) {
+      const now = Date.now();
+      if (now < state.endTime) {
+        timeLeft.value = Math.floor((state.endTime - now) / 1000);
+        startTimer();
+      } else {
+        notifyTimeUp();
+        resetTimer();
+      }
+    } else {
+      timeLeft.value = state.timeLeft;
+    }
   }
+}
+
+// 添加组件生命周期钩子
+onMounted(() => {
+  restoreTimerState();
+  
+  // 添加页面关闭事件监听
+  window.addEventListener('beforeunload', saveTimerState);
+});
+
+onUnmounted(() => {
+  if (worker.value) {
+    worker.value.terminate();
+    worker.value = null;
+  }
+  window.removeEventListener('beforeunload', saveTimerState);
 });
 </script>
 
