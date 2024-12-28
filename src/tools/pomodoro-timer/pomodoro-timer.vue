@@ -31,6 +31,9 @@ watch(records, (newRecords) => {
 const worker = ref<Worker | null>(null);
 const endTime = ref<number>(0);
 
+// 添加新的状态来跟踪完成的番茄钟数量
+const completedPomodoros = ref(0);
+
 // 修改计时器相关函数
 function startTimer() {
   if (!isRunning.value) {
@@ -75,6 +78,7 @@ function pauseTimer() {
 function resetTimer() {
   pauseTimer();
   timeLeft.value = getDurationForMode(currentMode.value);
+  completedPomodoros.value = 0;
 }
 
 function switchMode(mode: TimerMode) {
@@ -97,6 +101,7 @@ function notifyTimeUp() {
   // 播放提示音
   const audio = new Audio('/notification.mp3');
   audio.play();
+  
   // 发送桌面通知
   if (Notification.permission === 'granted') {
     new Notification(t('title'), {
@@ -104,9 +109,20 @@ function notifyTimeUp() {
     });
   }
   
-  // 工作时间结束时添加记录
+  // 工作时间结束时添加记录并切换模式
   if (currentMode.value === 'work') {
     addRecord();
+    completedPomodoros.value++;
+    
+    // 每完成4个番茄钟后切换到长休息，否则切换到短休息
+    if (completedPomodoros.value % 4 === 0) {
+      switchMode('longBreak');
+    } else {
+      switchMode('shortBreak');
+    }
+  } else {
+    // 休息结束后切换回工作模式
+    switchMode('work');
   }
 }
 
@@ -142,6 +158,7 @@ function saveTimerState() {
     timeLeft: timeLeft.value,
     currentMode: currentMode.value,
     endTime: endTime.value,
+    completedPomodoros: completedPomodoros.value,
   };
   localStorage.setItem('pomodoro-state', JSON.stringify(state));
 }
@@ -151,6 +168,7 @@ function restoreTimerState() {
   if (savedState) {
     const state = JSON.parse(savedState);
     currentMode.value = state.currentMode;
+    completedPomodoros.value = state.completedPomodoros || 0;
     
     if (state.isRunning) {
       const now = Date.now();
