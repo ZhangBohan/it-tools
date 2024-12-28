@@ -19,9 +19,35 @@ syncRef(
   locale,
   useStorage('locale', locale),
 );
+
+// 添加 sitemap 链接到头部
+const head = document.head;
+const sitemapLink = document.createElement('link');
+sitemapLink.rel = 'sitemap';
+sitemapLink.type = 'application/xml';
+sitemapLink.href = '/sitemap.xml';
+head.appendChild(sitemapLink);
 </script>
 
 <template>
+  <head>
+    <!-- 基本 SEO meta 标签 -->
+    <meta name="description" content="工具网站">
+    <meta name="keywords" content="关键词1,关键词2">
+    <meta name="author" content="伯函">
+    
+    <!-- Open Graph meta 标签 -->
+    <meta property="og:title" content="工具网站">
+    <meta property="og:description" content="工具网站">
+    <meta property="og:image" content="https://tools.bohanzhang.com/favicon.ico">
+    <meta property="og:url" content="https://tools.bohanzhang.com">
+    
+    <!-- Twitter Card meta 标签 -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="工具网站">
+    <meta name="twitter:description" content="工具网站">
+    <meta name="twitter:image" content="https://tools.bohanzhang.com/favicon.ico">
+  </head>
   <n-config-provider :theme="theme" :theme-overrides="themeOverrides">
     <Analytics />
     <NGlobalStyle />
